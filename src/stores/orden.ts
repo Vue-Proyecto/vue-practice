@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { useFetchGet } from "@/composable/httpRequest";
 
-import type { IReadOrden } from "@/type/orden/order";
+import type { IReadOrden, IReadItems } from "@/type/orden/order";
 
 export const useOrdenStore = defineStore("orden", {
   state: () => ({
@@ -25,6 +25,10 @@ export const useOrdenStore = defineStore("orden", {
       }
 
       this.loading = false;
+    },
+
+    saveItemOrden(payload: IReadItems, index: number) {
+      this.listData[index].items.push(payload);
     },
 
     formatData(data: any): IReadOrden[] {
