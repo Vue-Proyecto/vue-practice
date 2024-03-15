@@ -1,34 +1,49 @@
 import { defineStore } from "pinia";
 import { useFetchGet } from "@/composable/httpRequest";
+
+import type { IReadOrden } from "@/type/orden/order";
+
 export const useOrdenStore = defineStore("orden", {
   state: () => ({
-    listData: [],
+    listData: [] as IReadOrden[],
     loading: false as boolean,
   }),
 
-  getters: {},
+  getters: {
+    getListData: (state) => state.listData,
+  },
 
   actions: {
     async getListOrden() {
       this.loading = true;
-      let dataJson = [];
+
       const response = await useFetchGet();
 
       if (response.ok) {
-        dataJson = await response.json();
-        this.formatData(dataJson?.orders);
+        const dataJson = await response.json();
+        this.listData = this.formatData(dataJson.orders) as IReadOrden[];
       }
 
       this.loading = false;
     },
 
-    formatData(data) {
-      const format = data.map((orden) => {
+    formatData(data: any): IReadOrden[] {
+      const format = data.map((orden: any) => {
+        const { id, number, items } = orden;
 
-
-        
-        console.log(orden);
+        return {
+          id,
+          number,
+          items: items.map((detail: any) => ({
+            sku: detail.sku,
+            name: detail.name,
+            quantity: detail.quantity,
+            price: detail.price,
+          })),
+        };
       });
+
+      return format;
     },
   },
 });
