@@ -6,26 +6,38 @@
  -->
 
 
-    <v-btn color="primary" icon="mdi-plus" class="mb-4"></v-btn>
-    <v-data-table :headers="headers" :items="items" item-key="name" items-per-page="5"></v-data-table>
+    <v-alert class="mb-3" border="start" close-label="Close Alert" color="primary" variant="tonal" density="compact">
+        <div class="text-h6">Ordenes de compra</div>
+    </v-alert>
 
+    <v-table density="compact">
+        <thead>
+            <tr>
+                <th class="text-left">
+                    Name
+                </th>
+                <th class="text-left">
+                    Calories
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="item in items" :key="item.name">
+                <td>{{ item.name }}</td>
+                <td>{{ item.calories }}</td>
+            </tr>
+        </tbody>
+    </v-table>
 
 </template>
 
 <script type="ts" setup>
+import { useOrdenStore } from '@/stores/orden';
+import { onMounted, ref } from 'vue';
+const storeOrden = useOrdenStore();
 
-const headers = [
-    {
-        title: 'Dessert (100g serving)',
-        class: 'primary',
-        key: 'name',
-    },
-    { title: 'Calories', key: 'calories', align: 'end' },
-    { title: 'Fat (g)', key: 'fat', align: 'end' },
-    { title: 'Carbs (g)', key: 'carbs', align: 'end' },
-    { title: 'Protein (g)', key: 'protein', align: 'end' },
-    { title: 'Iron (%)', key: 'iron', align: 'end' },
-];
+const listOrden = ref([]);
+
 
 const items = [
     {
@@ -109,6 +121,13 @@ const items = [
         iron: '22',
     },
 ]
+
+onMounted(() => {
+    storeOrden.getListOrden();
+})
+
+
+
 
 
 
