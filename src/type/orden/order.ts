@@ -4,7 +4,7 @@ export interface IReadOrden {
   items: IReadItems[];
 }
 
-interface IReadItems {
+export interface IReadItems {
   name: string;
   price: string;
   quantity: string;
