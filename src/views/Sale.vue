@@ -194,11 +194,13 @@ const saveProducto = async () => {
 
 const payOrden = () => {
     dialog.value = false;
-    Swal.fire({
-        title: '¡Gracias por tu compra!',
-        text: 'Si necesitas algo más o tienes alguna pregunta, no dudes en ponerte en contacto con nosotros. ',
-        icon: 'success',
-    });
+    setTimeout(() => {
+        Swal.fire({
+            title: '¡Gracias por tu compra!',
+            text: 'Si necesitas algo más o tienes alguna pregunta, no dudes en ponerte en contacto con nosotros. ',
+            icon: 'success',
+        });
+    }, 400);
 }
 
 const clearForm = () => {
