@@ -1,6 +1,6 @@
 <template>
     <v-app-bar color="primary" prominent>
-        <v-toolbar-title>Company</v-toolbar-title>
+        <v-toolbar-title><v-icon class="me-3">mdi-shopping</v-icon> Company</v-toolbar-title>
         <!-- <v-spacer></v-spacer>
         <div>Folio</div>
         <div class="folio bg-secondary rounded-circle mx-2">1</div> -->

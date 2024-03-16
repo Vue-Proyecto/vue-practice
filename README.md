@@ -5,17 +5,20 @@ Realiza una interfaz de usuario con un diseño que tenga buena usabilidad para o
 
 ## Project Setup
 
+### Version node
+* Install Node.js version 18.0 
+
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compile for Development
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Compile and Minify for Production
 
 ```sh
 npm run build
@@ -26,3 +29,8 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Images
+
+![This is an alt text.](./src/assets/page1.png "img de ordenes.")
+![This is an alt text.](./src/assets/page2.png "img de orde detalle")
