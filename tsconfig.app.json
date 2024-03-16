@@ -11,7 +11,7 @@
       "@/*": ["./src/*"]
     },
     "noImplicitAny": false,
-    // "allowJs": true
+    "allowJs": true,
     "types": [
       "vue-sweetalert2"
     ],

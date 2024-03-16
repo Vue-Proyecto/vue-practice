@@ -47,7 +47,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="detail in ordenDetail">
+                        <tr v-for="(detail, index) in ordenDetail" :key="index">
                             <td>{{ detail.sku }}</td>
                             <td>{{ detail.name }}</td>
                             <td class="text-end">{{ detail.quantity }}</td>
@@ -140,10 +140,9 @@
 <script lang="ts" setup>
 import Swal from 'sweetalert2'
 
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useOrdenStore } from '@/stores/orden';
 import type { IReadItems } from '@/type/orden/order';
-import { version } from 'punycode';
 
 const storeOrden = useOrdenStore();
 const dialog = ref<Boolean>(false);
