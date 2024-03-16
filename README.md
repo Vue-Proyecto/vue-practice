@@ -1,4 +1,4 @@
-# Prueba técnica | order de compra
+# Prueba técnica | orden de compra
 
 Realiza una interfaz de usuario con un diseño que tenga buena usabilidad para obtener la información de la orden de compra
 
@@ -30,7 +30,7 @@ npm run build
 npm run lint
 ```
 
-### Images
+### Project image
 
 ![This is an alt text.](./src/assets/page1.png "img de ordenes.")
 ![This is an alt text.](./src/assets/page2.png "img de orde detalle")
