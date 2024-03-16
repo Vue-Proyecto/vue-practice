@@ -12,5 +12,8 @@
     },
     "noImplicitAny": false,
     // "allowJs": true
+    "types": [
+      "vue-sweetalert2"
+    ],
   },
 }

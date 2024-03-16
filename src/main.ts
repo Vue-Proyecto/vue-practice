@@ -1,13 +1,15 @@
 import "./assets/main.css";
+import 'sweetalert2/dist/sweetalert2.min.css';
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
+
+
+import App from "./App.vue";
+import VueSweetalert2  from 'vue-sweetalert2';
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 
-import App from "./App.vue";
-// import router from "./router";
-
-import "@mdi/font/css/materialdesignicons.css";
-import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
@@ -20,7 +22,6 @@ const vuetify = createVuetify({
 });
 
 app.use(createPinia());
-// app.use(router);
 app.use(vuetify);
-
+app.use(VueSweetalert2);
 app.mount("#app");

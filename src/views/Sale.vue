@@ -42,16 +42,16 @@
                         <tr>
                             <th class="bg-grey-lighten-3">Sku</th>
                             <th class="bg-grey-lighten-3">Nombre</th>
-                            <th class="bg-grey-lighten-3">Cantidad</th>
-                            <th class="bg-grey-lighten-3">Precio</th>
+                            <th class="bg-grey-lighten-3 text-end">Cantidad</th>
+                            <th class="bg-grey-lighten-3 text-end">Precio</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="detail in ordenDetail">
                             <td>{{ detail.sku }}</td>
                             <td>{{ detail.name }}</td>
-                            <td>{{ detail.quantity }}</td>
-                            <td>$ {{ detail.price }}</td>
+                            <td class="text-end">{{ detail.quantity }}</td>
+                            <td class="text-end">$ {{ detail.price }}</td>
                         </tr>
                     </tbody>
                 </v-table>
@@ -60,7 +60,7 @@
                         <div class="text-body-1 text-uppercase text-end mb-2">Total de compra</div>
                         <div class="text-h5 text-uppercase text-end mb-4">$ {{ buyTotal }}</div>
 
-                        <v-btn class="d-block ml-auto mb-1" color="primary">Pagar</v-btn>
+                        <v-btn class="d-block ml-auto mb-1" color="primary" @click="payOrden()">Pagar</v-btn>
                     </v-alert>
                 </article>
             </v-card-text>
@@ -138,13 +138,14 @@
 
 
 <script lang="ts" setup>
+import Swal from 'sweetalert2'
+
+import { computed, inject, onMounted, reactive, ref } from 'vue';
 import { useOrdenStore } from '@/stores/orden';
-import { computed, onMounted, reactive, ref } from 'vue';
 import type { IReadItems } from '@/type/orden/order';
 import { version } from 'punycode';
 
 const storeOrden = useOrdenStore();
-
 const dialog = ref<Boolean>(false);
 const modalFrom = ref<Boolean>(false);
 const noOrden = ref<string>('');
@@ -189,6 +190,15 @@ const saveProducto = async () => {
     storeOrden.saveItemOrden(JSON.parse(JSON.stringify(form)), indexOrden.value);
     modalFrom.value = false;
     clearForm();
+}
+
+const payOrden = () => {
+    dialog.value = false;
+    Swal.fire({
+        title: '¡Gracias por tu compra!',
+        text: 'Si necesitas algo más o tienes alguna pregunta, no dudes en ponerte en contacto con nosotros. ',
+        icon: 'success',
+    });
 }
 
 const clearForm = () => {
