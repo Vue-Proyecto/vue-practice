@@ -11,6 +11,7 @@ export const useOrdenStore = defineStore("orden", {
 
   getters: {
     getListData: (state) => state.listData,
+    getLoading: (state) => state.loading
   },
 
   actions: {

@@ -4,7 +4,13 @@
     </v-alert>
 
     <div class="container__list">
-        <v-table density="compact" hover height="500" fixed-header>
+
+        <div class="load__content" v-if="storeOrden.getLoading">
+            <v-progress-circular color="primary" class="mb-1" indeterminate :size="54" :width="6" />
+            <div class="text-subtitle-1">Cargando ...</div>
+        </div>
+
+        <v-table v-else density="compact" hover height="500" fixed-header>
             <thead>
                 <tr>
                     <th class="bg-grey-lighten-3">ID</th>
@@ -113,7 +119,18 @@
 <style scoped>
 .container__list {
     width: 100%;
+    height: calc(100vh - 300px);
     max-width: 60%;
+
+}
+
+.load__content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 </style>
 
