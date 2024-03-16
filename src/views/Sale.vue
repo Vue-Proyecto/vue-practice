@@ -1,18 +1,14 @@
 <template>
-
-
-
     <v-alert class="mb-3" border="start" close-label="Close Alert" color="primary" variant="tonal" density="compact">
         <div class="text-h6 ">Ordenes de compra</div>
     </v-alert>
-
 
     <div class="container__list">
         <v-table density="compact" hover height="500" fixed-header>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Orden</th>
+                    <th class="bg-grey-lighten-3">ID</th>
+                    <th class="bg-grey-lighten-3">Orden</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +20,6 @@
         </v-table>
     </div>
 
-
     <!-- detalle orden -->
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
         <v-card>
@@ -35,14 +30,14 @@
 
 
             <v-card-text>
-                <v-btn color="pink" class="mb-5" icon="mdi-plus" @click="modalFrom = true" />
-                <v-table density="compact" hover height="500" fixed-header>
+                <v-btn color="teal-darken-2" class="mb-5" icon="mdi-plus" @click="modalFrom = true" />
+                <v-table density="compact" hover height="400" fixed-header>
                     <thead>
                         <tr>
-                            <th>Sku</th>
-                            <th>Nombre</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
+                            <th class="bg-grey-lighten-3">Sku</th>
+                            <th class="bg-grey-lighten-3">Nombre</th>
+                            <th class="bg-grey-lighten-3">Cantidad</th>
+                            <th class="bg-grey-lighten-3">Precio</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,12 +49,21 @@
                         </tr>
                     </tbody>
                 </v-table>
+                <article class="d-flex justify-end">
+                    <v-alert max-width="320" border="top" border-color="teal-darken-2" color="white">
+                        <div class="text-body-1 text-uppercase text-end mb-2">Total de compra</div>
+                        <div class="text-h5 text-uppercase text-end mb-4">$ {{ buyTotal }}</div>
+
+                        <v-btn class="d-block ml-auto mb-1" color="primary">Pagar</v-btn>
+                    </v-alert>
+                </article>
             </v-card-text>
+
         </v-card>
+
     </v-dialog>
 
     <!-- fomrularios -->
-
     <v-dialog v-model="modalFrom" max-width="500">
         <v-card>
             <v-card-title class="d-flex justify-space-between align-center">
@@ -71,31 +75,35 @@
             <v-divider class="mb-1"></v-divider>
 
             <v-card-text>
-                <section>
-                    <div class="text-subtitle-1 text-medium-emphasis">Sku *</div>
-                    <v-text-field v-model="form.sku" density="compact" placeholder="Escriba qui..." color="primary"
-                        variant="outlined"></v-text-field>
-                </section>
-                <section>
-                    <div class="text-subtitle-1 text-medium-emphasis">Nombre *</div>
-                    <v-text-field v-model="form.name" density="compact" placeholder="Escriba qui..." color="primary"
-                        variant="outlined"></v-text-field>
-                </section>
-                <section>
-                    <div class="text-subtitle-1 text-medium-emphasis">Cantidad *</div>
-                    <v-text-field v-model="form.quantity" density="compact" placeholder="Escriba qui..." color="primary"
-                        variant="outlined"></v-text-field>
-                </section>
-                <section>
-                    <div class="text-subtitle-1 text-medium-emphasis">Precio *</div>
-                    <v-text-field v-model="form.price" density="compact" placeholder="Escriba qui..." color="primary"
-                        variant="outlined"></v-text-field>
-                </section>
+                <v-form>
+                    <section>
+                        <div class="text-subtitle-1 text-medium-emphasis">Sku *</div>
+                        <v-text-field maxlength="25" :rules="validateForm" v-model="form.sku" density="compact"
+                            placeholder="Escriba qui..." color="primary" variant="outlined"></v-text-field>
+                    </section>
+                    <section>
+                        <div class="text-subtitle-1 text-medium-emphasis">Nombre *</div>
+                        <v-text-field maxlength="250" :rules="validateForm" v-model="form.name" density="compact"
+                            placeholder="Escriba qui..." color="primary" variant="outlined"></v-text-field>
+                    </section>
+                    <section>
+                        <div class="text-subtitle-1 text-medium-emphasis">Cantidad *</div>
+                        <v-text-field type="number" :rules="validateForm" v-model="form.quantity" density="compact"
+                            placeholder="Escriba qui..." color="primary" variant="outlined"></v-text-field>
+                    </section>
+                    <section>
+                        <div class="text-subtitle-1 text-medium-emphasis">Precio *</div>
+                        <v-text-field :rules="validateForm" v-model="form.price" density="compact"
+                            placeholder="Escriba qui..." color="primary" variant="outlined"></v-text-field>
+                    </section>
+                </v-form>
             </v-card-text>
 
 
             <v-card-actions class="my-2 d-flex justify-end">
-                <v-btn color="primary" variant="flat" @click="saveProducto()">Guardar</v-btn>
+                <v-btn :disabled="validateSave" color="primary" variant="flat" @click="saveProducto()">
+                    <v-icon class="me-1">mdi-content-save</v-icon>
+                    Guardar</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -114,8 +122,9 @@
 
 <script lang="ts" setup>
 import { useOrdenStore } from '@/stores/orden';
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import type { IReadItems } from '@/type/orden/order';
+import { version } from 'punycode';
 
 const storeOrden = useOrdenStore();
 
@@ -125,9 +134,13 @@ const noOrden = ref<string>('');
 const indexOrden = ref<number | null>(null);
 const ordenDetail = ref<IReadItmes[]>([]);
 
+
+const validateForm = ref([v => !!v || 'Es requerido'])
+
+
 const form = reactive<IReadItems>({
-    sku: '243232',
-    name: 'sdsds',
+    sku: '',
+    name: '',
     quantity: '',
     price: '',
 })
@@ -137,6 +150,17 @@ onMounted(async () => {
     await storeOrden.getListOrden();
 })
 
+
+const validateSave = computed(() => {
+    const status = Object.values(form).includes("");
+    return status;
+});
+
+const buyTotal = computed(() => {
+    const total = ordenDetail.value.reduce((acc, produc) => acc + parseFloat(produc.price), 0);
+    return new Intl.NumberFormat({ style: 'currency', currency: 'MX' }).format(total)
+})
+
 const openDetail = (id: String, index: number) => {
     noOrden.value = id;
     indexOrden.value = index;
@@ -144,7 +168,7 @@ const openDetail = (id: String, index: number) => {
     dialog.value = true;
 }
 
-const saveProducto = () => {
+const saveProducto = async () => {
     storeOrden.saveItemOrden(JSON.parse(JSON.stringify(form)), indexOrden.value);
     modalFrom.value = false;
     clearForm();
