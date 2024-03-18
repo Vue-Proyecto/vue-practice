@@ -51,14 +51,14 @@
                             <td>{{ detail.sku }}</td>
                             <td>{{ detail.name }}</td>
                             <td class="text-end">{{ detail.quantity }}</td>
-                            <td class="text-end">$ {{ detail.price }}</td>
+                            <td class="text-end">{{ detail.price }}</td>
                         </tr>
                     </tbody>
                 </v-table>
                 <article class="d-flex justify-end">
                     <v-alert max-width="320" border="top" border-color="teal-darken-2" color="white">
                         <div class="text-body-1 text-uppercase text-end mb-2">Total de compra</div>
-                        <div class="text-h5 text-uppercase text-end mb-4">$ {{ buyTotal }}</div>
+                        <div class="text-h5 text-uppercase text-end mb-4">{{ buyTotal }}</div>
 
                         <v-btn class="d-block ml-auto mb-1" color="primary" @click="payOrden()">Pagar</v-btn>
                     </v-alert>
@@ -145,11 +145,11 @@ import { useOrdenStore } from '@/stores/orden';
 import type { IReadItems } from '@/type/orden/order';
 
 const storeOrden = useOrdenStore();
-const dialog = ref<Boolean>(false);
-const modalFrom = ref<Boolean>(false);
+const dialog = ref<boolean>(false);
+const modalFrom = ref<boolean>(false);
 const noOrden = ref<string>('');
 const indexOrden = ref<number | null>(null);
-const ordenDetail = ref<IReadItmes[]>([]);
+const ordenDetail = ref<IReadItems[]>([]);
 
 
 const validateForm = ref([v => !!v || 'Es requerido'])
@@ -174,21 +174,28 @@ const validateSave = computed(() => {
 });
 
 const buyTotal = computed(() => {
-    const total = ordenDetail.value.reduce((acc, produc) => acc + parseFloat(produc.price), 0);
-    return new Intl.NumberFormat({ style: 'currency', currency: 'MX' }).format(total)
+    const total: number = ordenDetail.value.reduce((acc, produc) => acc + parseFloat(produc.price), 0);
+    return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(total);
 })
 
 const openDetail = (id: String, index: number) => {
-    noOrden.value = id;
+    noOrden.value = id as string;
     indexOrden.value = index;
-    ordenDetail.value = storeOrden.getListData.find(order => order.id === id).items;
+
+    const detail = storeOrden.getListData.find(order => order.id === id);
+    if (detail !== undefined) {
+        ordenDetail.value = detail.items;
+    }
     dialog.value = true;
 }
 
 const saveProducto = async () => {
-    storeOrden.saveItemOrden(JSON.parse(JSON.stringify(form)), indexOrden.value);
-    modalFrom.value = false;
-    clearForm();
+    if (indexOrden.value !== null) {
+        storeOrden.saveItemOrden(JSON.parse(JSON.stringify(form)), indexOrden.value);
+        modalFrom.value = false;
+        clearForm();
+    }
+
 }
 
 const payOrden = () => {
